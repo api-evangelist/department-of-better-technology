@@ -1,0 +1,17 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/department-of-better-technology-screendoor-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - query
+schemes:
+- name: apiKeyAuth
+  type: apiKey
+  in: query
+  parameter: api_key
+  description: Your Screendoor API key, obtained in Screendoor under Settings -> API Keys, passed
+    as the `api_key` URL parameter on every request.
+  sources:
+  - openapi/department-of-better-technology-screendoor-openapi.yml
