@@ -1,0 +1,256 @@
+openapi: 3.0.3
+info:
+  title: Screendoor Files Forms API
+  description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
+  version: '1'
+  contact:
+    name: Department of Better Technology (CityBase)
+    url: https://help.dobt.co/
+  x-api-version-header: 'Api-Version: 1'
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://dobtco.github.io/screendoor-api-docs/
+servers:
+- url: https://screendoor.dobt.co/api
+  description: Screendoor production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Forms
+  description: Manage the form fields collected for a project.
+paths:
+  /projects/{project_id}/forms:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listForms
+      summary: List a project's forms
+      description: Returns the forms defined for a project.
+      tags:
+      - Forms
+      responses:
+        '200':
+          description: A list of forms.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Form'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{project_id}/forms/{id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/PathId'
+    get:
+      operationId: getForm
+      summary: Retrieve a form
+      description: Returns a single form and its field data.
+      tags:
+      - Forms
+      responses:
+        '200':
+          description: The requested form.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateForm
+      summary: Update a form
+      description: Replaces the field data of a form.
+      tags:
+      - Forms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FormField'
+      responses:
+        '200':
+          description: The updated form.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Form'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /projects/{project_id}/form/fields:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: createFormField
+      summary: Add a field to the initial form
+      description: Adds a new field to the project's initial form at an optional position.
+      tags:
+      - Forms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_data:
+                  $ref: '#/components/schemas/FormField'
+                position:
+                  type: integer
+                  description: Zero-based insertion index.
+      responses:
+        '201':
+          description: The created field.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormField'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /projects/{project_id}/form/fields/{id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/PathId'
+    put:
+      operationId: updateFormField
+      summary: Update a form field
+      description: Updates a single field on the initial form.
+      tags:
+      - Forms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_data:
+                  $ref: '#/components/schemas/FormField'
+      responses:
+        '200':
+          description: The updated field.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormField'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteFormField
+      summary: Delete a form field
+      description: Removes a field from the initial form.
+      tags:
+      - Forms
+      responses:
+        '204':
+          description: The field was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Form:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        field_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormField'
+    FormField:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: field
+        field_type:
+          type: string
+          description: The kind of field.
+          example: paragraph
+        label:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
+    PathId:
+      name: id
+      in: path
+      required: true
+      description: The id of the resource.
+      schema:
+        type: string
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Your Screendoor API key, obtained in Screendoor under Settings -> API Keys, passed as the `api_key` URL parameter on every request.

@@ -1,0 +1,391 @@
+openapi: 3.0.3
+info:
+  title: Screendoor Files Responses API
+  description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
+  version: '1'
+  contact:
+    name: Department of Better Technology (CityBase)
+    url: https://help.dobt.co/
+  x-api-version-header: 'Api-Version: 1'
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://dobtco.github.io/screendoor-api-docs/
+servers:
+- url: https://screendoor.dobt.co/api
+  description: Screendoor production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Responses
+  description: Create, read, update, trash, and recover form submissions.
+paths:
+  /projects/{project_id}/responses:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listResponses
+      summary: List responses
+      description: Returns a paginated list of a project's responses (submissions).
+      tags:
+      - Responses
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PerPage'
+      - name: sort
+        in: query
+        description: Field to sort by.
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: Sort direction.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: trash
+        in: query
+        description: Return trashed responses instead of active ones.
+        schema:
+          type: boolean
+      - name: advanced_search
+        in: query
+        description: Advanced search query string.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A paginated list of responses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Response'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createResponse
+      summary: Create a response
+      description: Submits a new response to a project's form.
+      tags:
+      - Responses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponseWrite'
+      responses:
+        '201':
+          description: The created response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDetailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /projects/{project_id}/responses/{response_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/ResponseId'
+    get:
+      operationId: getResponse
+      summary: Retrieve a response
+      description: Returns a single response, optionally in a detailed format.
+      tags:
+      - Responses
+      parameters:
+      - name: response_format
+        in: query
+        description: Use `detailed` to include assignees, archived responses, and more.
+        schema:
+          type: string
+          enum:
+          - detailed
+      responses:
+        '200':
+          description: The requested response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDetailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateResponse
+      summary: Update a response
+      description: Updates the field values, status, or labels of a response.
+      tags:
+      - Responses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponseWrite'
+      responses:
+        '200':
+          description: The updated response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDetailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: trashResponse
+      summary: Move a response to trash
+      description: Moves a response to the trash (recoverable).
+      tags:
+      - Responses
+      responses:
+        '204':
+          description: The response was moved to trash.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{project_id}/responses/{response_id}/recover:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/ResponseId'
+    post:
+      operationId: recoverResponse
+      summary: Recover a response from trash
+      description: Restores a trashed response.
+      tags:
+      - Responses
+      responses:
+        '200':
+          description: The recovered response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /projects/{project_id}/responses/{response_id}/delete_forever:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/ResponseId'
+    delete:
+      operationId: deleteResponseForever
+      summary: Permanently delete a response
+      description: Permanently deletes a response. This cannot be undone.
+      tags:
+      - Responses
+      responses:
+        '204':
+          description: The response was permanently deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Assignee:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - User
+          - Team
+        id:
+          type: integer
+        name:
+          type: string
+    Response:
+      type: object
+      properties:
+        id:
+          type: integer
+        sequential_id:
+          type: integer
+        project_id:
+          type: integer
+        form_id:
+          type: integer
+          nullable: true
+        initial_form_id:
+          type: integer
+          nullable: true
+        pretty_id:
+          type: string
+        submitted_at:
+          type: string
+          format: date-time
+          nullable: true
+        responses:
+          type: object
+          description: Map of field id (string) to submitted value.
+          additionalProperties: true
+        rating_aggregates:
+          type: object
+        average_rating:
+          type: number
+          nullable: true
+        num_ratings:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseLabel'
+        user:
+          type: object
+          nullable: true
+        submission_source:
+          $ref: '#/components/schemas/SubmissionSource'
+    ResponseWrite:
+      type: object
+      properties:
+        response_fields:
+          type: object
+          description: Map of field id (string) to submitted value.
+          additionalProperties: true
+        status:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        skip_email_confirmation:
+          type: boolean
+        skip_notifications:
+          type: boolean
+        skip_validation:
+          type: boolean
+        force_validation:
+          type: boolean
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    ResponseDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Response'
+      - type: object
+        properties:
+          archived_responses:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                responses_updated_at:
+                  type: string
+                  format: date-time
+                responses:
+                  type: object
+          assignees:
+            type: array
+            items:
+              $ref: '#/components/schemas/Assignee'
+    SubmissionSource:
+      type: object
+      properties:
+        type:
+          type: string
+          example: frontend
+        hostname:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+    ResponseLabel:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  parameters:
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
+    PerPage:
+      name: per_page
+      in: query
+      description: The number of records per page (max 100).
+      schema:
+        type: integer
+        default: 25
+        maximum: 100
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Your Screendoor API key, obtained in Screendoor under Settings -> API Keys, passed as the `api_key` URL parameter on every request.

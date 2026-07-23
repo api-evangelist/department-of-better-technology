@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  title: Screendoor Files Response Assignments API
+  description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
+  version: '1'
+  contact:
+    name: Department of Better Technology (CityBase)
+    url: https://help.dobt.co/
+  x-api-version-header: 'Api-Version: 1'
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://dobtco.github.io/screendoor-api-docs/
+servers:
+- url: https://screendoor.dobt.co/api
+  description: Screendoor production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Response Assignments
+  description: Assign users or teams to an individual response.
+paths:
+  /responses/{response_id}/assignments:
+    parameters:
+    - $ref: '#/components/parameters/ResponseId'
+    get:
+      operationId: listResponseAssignments
+      summary: List a response's assignees
+      tags:
+      - Response Assignments
+      responses:
+        '200':
+          description: The users/teams assigned to the response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: addResponseAssignments
+      summary: Add assignees to a response
+      description: Adds assignees. Each entry has the form "Type,id" (e.g. "User,10").
+      tags:
+      - Response Assignments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssigneeNames'
+      responses:
+        '200':
+          description: The updated set of assignees.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      operationId: replaceResponseAssignments
+      summary: Replace a response's assignees
+      tags:
+      - Response Assignments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssigneeNames'
+      responses:
+        '200':
+          description: The replaced set of assignees.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: removeAllResponseAssignments
+      summary: Remove all assignees from a response
+      tags:
+      - Response Assignments
+      responses:
+        '204':
+          description: All assignees were removed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /responses/{response_id}/assignments/{assignment_parameter}:
+    parameters:
+    - $ref: '#/components/parameters/ResponseId'
+    - name: assignment_parameter
+      in: path
+      required: true
+      description: The assignee identifier in "Type,id" form.
+      schema:
+        type: string
+    delete:
+      operationId: removeResponseAssignment
+      summary: Remove an assignee from a response
+      tags:
+      - Response Assignments
+      responses:
+        '204':
+          description: The assignee was removed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Assignee:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - User
+          - Team
+        id:
+          type: integer
+        name:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    AssigneeNames:
+      type: object
+      required:
+      - assignees
+      properties:
+        assignees:
+          type: array
+          description: Each entry has the form "Type,id" (e.g. "User,10").
+          items:
+            type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  parameters:
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Your Screendoor API key, obtained in Screendoor under Settings -> API Keys, passed as the `api_key` URL parameter on every request.

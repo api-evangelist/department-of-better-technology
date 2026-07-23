@@ -1,0 +1,205 @@
+openapi: 3.0.3
+info:
+  title: Screendoor Files Labels API
+  description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
+  version: '1'
+  contact:
+    name: Department of Better Technology (CityBase)
+    url: https://help.dobt.co/
+  x-api-version-header: 'Api-Version: 1'
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://dobtco.github.io/screendoor-api-docs/
+servers:
+- url: https://screendoor.dobt.co/api
+  description: Screendoor production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Labels
+  description: Manage labels used to tag responses within a project.
+paths:
+  /projects/{project_id}/labels:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listLabels
+      summary: List labels
+      description: Returns the labels defined for a project.
+      tags:
+      - Labels
+      responses:
+        '200':
+          description: A list of labels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectLabel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createLabel
+      summary: Create a label
+      description: Creates a new label for the project.
+      tags:
+      - Labels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLabelWrite'
+      responses:
+        '201':
+          description: The created label.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLabel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /projects/{project_id}/labels/{name}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/PathName'
+    get:
+      operationId: getLabel
+      summary: Retrieve a label
+      description: Returns a single label by name.
+      tags:
+      - Labels
+      responses:
+        '200':
+          description: The requested label.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLabel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateLabel
+      summary: Update a label
+      description: Updates the name or color of a label.
+      tags:
+      - Labels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLabelWrite'
+      responses:
+        '200':
+          description: The updated label.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLabel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: deleteLabel
+      summary: Delete a label
+      description: Removes a label from the project.
+      tags:
+      - Labels
+      responses:
+        '204':
+          description: The label was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ProjectLabel:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+          description: Hex color without leading '#'.
+        responses_count:
+          type: integer
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    ProjectLabelWrite:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+  parameters:
+    PathName:
+      name: name
+      in: path
+      required: true
+      description: The name of the resource (URL-encoded).
+      schema:
+        type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Your Screendoor API key, obtained in Screendoor under Settings -> API Keys, passed as the `api_key` URL parameter on every request.

@@ -1,0 +1,263 @@
+openapi: 3.0.3
+info:
+  title: Screendoor Files Projects API
+  description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
+  version: '1'
+  contact:
+    name: Department of Better Technology (CityBase)
+    url: https://help.dobt.co/
+  x-api-version-header: 'Api-Version: 1'
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://dobtco.github.io/screendoor-api-docs/
+servers:
+- url: https://screendoor.dobt.co/api
+  description: Screendoor production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Projects
+  description: Manage projects (forms and their workflow) within a site.
+paths:
+  /sites/{site_id}/projects:
+    parameters:
+    - $ref: '#/components/parameters/SiteId'
+    get:
+      operationId: listProjects
+      summary: List projects
+      description: Returns a paginated list of the projects belonging to a site.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: A paginated list of projects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createProject
+      summary: Create a project
+      description: Creates a new project within the site.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectWrite'
+      responses:
+        '201':
+          description: The created project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /sites/{site_id}/projects/{project_id}:
+    parameters:
+    - $ref: '#/components/parameters/SiteId'
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: getProject
+      summary: Retrieve a project
+      description: Returns a single project by id.
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: The requested project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateProject
+      summary: Update a project
+      description: Updates the attributes of an existing project.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectWrite'
+      responses:
+        '200':
+          description: The updated project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: deleteProject
+      summary: Delete a project
+      description: Permanently deletes a project.
+      tags:
+      - Projects
+      responses:
+        '204':
+          description: The project was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  schemas:
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    ProjectWrite:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        sequential_id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          nullable: true
+        specifics:
+          type: object
+        visibility:
+          type: string
+          example: not_posted
+        responses_due_at:
+          type: string
+          format: date-time
+          nullable: true
+        enable_qa:
+          type: boolean
+        questions_due_at:
+          type: string
+          format: date-time
+          nullable: true
+        require_registration:
+          type: boolean
+        key_response_field_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        submitted_responses_count:
+          type: integer
+        show_respondents:
+          type: boolean
+        show_askers:
+          type: boolean
+        email_responses:
+          type: integer
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+  parameters:
+    PerPage:
+      name: per_page
+      in: query
+      description: The number of records per page (max 100).
+      schema:
+        type: integer
+        default: 25
+        maximum: 100
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
+    SiteId:
+      name: site_id
+      in: path
+      required: true
+      description: The id of the site.
+      schema:
+        type: integer
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Your Screendoor API key, obtained in Screendoor under Settings -> API Keys, passed as the `api_key` URL parameter on every request.
