@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: searched
+source: registry search (npm, PyPI) + GitHub org github.com/dobtco
+notes: >-
+  The Department of Better Technology / Screendoor does not publish a first-party client
+  SDK. The only client library located is a community-maintained Node module by a third
+  party (thoughtis / Douglas Johnson) — recorded as official:false. No first-party SDKs
+  were found, so no `SDKs` pointer is emitted. The dobtco GitHub org publishes open-source
+  building blocks (formbuilder, filterer) but no packaged Screendoor API client.
+packages:
+  - language: javascript
+    registry: npm
+    name: screendoor-api-node
+    version: 1.2.0
+    url: https://www.npmjs.com/package/screendoor-api-node
+    install: npm install screendoor-api-node
+    repository: https://github.com/thoughtis/screendoor-api-node
+    official: false
+    maintainer: thoughtis (Douglas Johnson)
+    description: Community NodeJS module for interacting with the Screendoor API.
+related_open_source:
+  - name: formbuilder
+    url: https://github.com/dobtco/formbuilder
+    description: >-
+      First-party open-source graphical form-builder UI library (the editor behind Screendoor
+      forms). Not a Screendoor API client; catalogued as a first-party component.
+  - name: filterer
+    url: https://github.com/dobtco/filterer
+    description: First-party open-source Ruby gem for object-oriented ActiveRecord query building.

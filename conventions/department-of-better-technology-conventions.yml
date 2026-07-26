@@ -1,0 +1,40 @@
+generated: '2026-07-18'
+method: searched
+source: https://dobtco.github.io/screendoor-api-docs/ + openapi/department-of-better-technology-screendoor-openapi.yml
+notes: >-
+  Cross-cutting request/response semantics for the Screendoor API, captured from the published
+  API reference and derived from the OpenAPI. No idempotency-key mechanism is documented, so no
+  `Idempotency` pointer is emitted.
+authentication:
+  style: api-key
+  location: query
+  parameter: api_key
+  ref: authentication/department-of-better-technology-authentication.yml
+versioning:
+  style: header-or-query
+  current: '1'
+  header: 'Api-Version: 1'
+  query: '?v=1'
+  ref: lifecycle/department-of-better-technology-lifecycle.yml
+pagination:
+  style: offset
+  params:
+    page: page
+    per_page: per_page
+  default_per_page: 25
+  max_per_page: 100
+  response_link_header: true
+  link_relations: [first, last, next, prev]
+idempotency:
+  supported: false
+  header: null
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: null
+error_envelope:
+  content_type: application/json
+  shape: '{ "error": string, "errors"?: { "<field>": [string] } }'
+  ref: errors/department-of-better-technology-problem-types.yml
+rate_limit_signaling:
+  documented: false

@@ -1,0 +1,17 @@
+generated: '2026-07-18'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: dobt.co
+  https: false
+- host: screendoor.dobt.co
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 18 23:59:59 2026 GMT
+  hsts: null
+domains:
+- domain: dobt.co
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: false

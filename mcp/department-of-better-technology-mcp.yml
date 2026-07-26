@@ -1,0 +1,133 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/department-of-better-technology-screendoor-openapi.yml
+notes: >-
+  No official hosted or published MCP server exists for Screendoor. This is a DERIVED
+  candidate tool list — one tool per OpenAPI operation — offered as a starting point for an
+  MCP wrapper over the Screendoor REST API. Not an authoritative provider artifact.
+server:
+  name: screendoor
+  transport: http
+  url: null
+tools:
+  - name: list_projects
+    description: List a site's projects.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listProjects
+  - name: create_project
+    description: Create a project in a site.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#createProject
+  - name: get_project
+    description: Retrieve a single project.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#getProject
+  - name: update_project
+    description: Update a project.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#updateProject
+  - name: delete_project
+    description: Delete a project.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#deleteProject
+  - name: list_forms
+    description: List a project's forms.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listForms
+  - name: get_form
+    description: Retrieve a form.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#getForm
+  - name: update_form
+    description: Update a form's field data.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#updateForm
+  - name: create_form_field
+    description: Add a field to the initial form.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#createFormField
+  - name: update_form_field
+    description: Update a form field.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#updateFormField
+  - name: delete_form_field
+    description: Delete a form field.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#deleteFormField
+  - name: list_statuses
+    description: List a project's statuses.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listStatuses
+  - name: create_status
+    description: Create a status.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#createStatus
+  - name: reorder_statuses
+    description: Reorder a project's statuses.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#reorderStatuses
+  - name: get_status
+    description: Retrieve a status by name.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#getStatus
+  - name: update_status
+    description: Update a status.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#updateStatus
+  - name: delete_status
+    description: Delete a status.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#deleteStatus
+  - name: list_labels
+    description: List a project's labels.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listLabels
+  - name: create_label
+    description: Create a label.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#createLabel
+  - name: get_label
+    description: Retrieve a label by name.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#getLabel
+  - name: update_label
+    description: Update a label.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#updateLabel
+  - name: delete_label
+    description: Delete a label.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#deleteLabel
+  - name: list_responses
+    description: List a project's responses.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listResponses
+  - name: create_response
+    description: Create a response (submission).
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#createResponse
+  - name: get_response
+    description: Retrieve a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#getResponse
+  - name: update_response
+    description: Update a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#updateResponse
+  - name: trash_response
+    description: Move a response to trash.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#trashResponse
+  - name: recover_response
+    description: Recover a response from trash.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#recoverResponse
+  - name: delete_response_forever
+    description: Permanently delete a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#deleteResponseForever
+  - name: list_response_labels
+    description: List a response's labels.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listResponseLabels
+  - name: add_response_labels
+    description: Add labels to a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#addResponseLabels
+  - name: replace_response_labels
+    description: Replace a response's labels.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#replaceResponseLabels
+  - name: remove_response_label
+    description: Remove one label from a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#removeResponseLabel
+  - name: remove_all_response_labels
+    description: Remove all labels from a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#removeAllResponseLabels
+  - name: list_response_assignments
+    description: List a response's assignees.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#listResponseAssignments
+  - name: add_response_assignments
+    description: Add assignees to a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#addResponseAssignments
+  - name: replace_response_assignments
+    description: Replace a response's assignees.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#replaceResponseAssignments
+  - name: remove_response_assignment
+    description: Remove one assignee from a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#removeResponseAssignment
+  - name: remove_all_response_assignments
+    description: Remove all assignees from a response.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#removeAllResponseAssignments
+  - name: upload_file
+    description: Upload a file for a File-type response field.
+    source_operation: openapi/department-of-better-technology-screendoor-openapi.yml#uploadFile

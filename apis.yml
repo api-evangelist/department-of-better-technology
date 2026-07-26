@@ -1,21 +1,193 @@
 aid: department-of-better-technology
 name: Department of Better Technology
-description: Department of Better Technology is a company surfaced as a portfolio company of 500-global
-  and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the
-  enrichment pipeline.
+description: >-
+  The Department of Better Technology (DOBT), founded in 2013 by former Presidential Innovation
+  Fellows and later acquired by CityBase, builds Screendoor — a form-building and submission-
+  management platform used by government agencies and organizations such as ProPublica, the Los
+  Angeles Times, the Consumer Financial Protection Bureau, and the Ford Foundation to run paperless
+  intake, evaluation, and approval workflows. The Screendoor REST API programmatically manages
+  sites, projects, forms and form fields, workflow statuses, labels, responses (submissions),
+  response labels, and reviewer assignments, using API-key authentication, offset pagination with
+  RFC 5988 Link headers, and an explicit API version.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://raw.githubusercontent.com/dobtco/screendoor-api-docs/master/source/images/logo.png
 url: https://raw.githubusercontent.com/api-evangelist/department-of-better-technology/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - 500-global
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
-apis: []
+- Forms
+- Government
+- GovTech
+- Civic Technology
+- Workflow
+- Data Collection
+- Screendoor
+- Public Sector
+- Forms API
+apis:
+- aid: department-of-better-technology:department-of-better-technology-files-api
+  name: Department of Better Technology Files API
+  description: Upload files referenced by response fields.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-files-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-forms-api
+  name: Department of Better Technology Forms API
+  description: Manage the form fields collected for a project.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Forms
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-forms-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-labels-api
+  name: Department of Better Technology Labels API
+  description: Manage labels used to tag responses within a project.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-labels-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-projects-api
+  name: Department of Better Technology Projects API
+  description: Manage projects (forms and their workflow) within a site.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-projects-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-response-assignments-api
+  name: Department of Better Technology Response Assignments API
+  description: Assign users or teams to an individual response.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Response Assignments
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-response-assignments-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-response-labels-api
+  name: Department of Better Technology Response Labels API
+  description: Attach or detach labels on an individual response.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Response Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-response-labels-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-responses-api
+  name: Department of Better Technology Responses API
+  description: Create, read, update, trash, and recover form submissions.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Responses
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-responses-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
+- aid: department-of-better-technology:department-of-better-technology-statuses-api
+  name: Department of Better Technology Statuses API
+  description: Manage the status workflow stages for a project's responses.
+  humanURL: https://dobtco.github.io/screendoor-api-docs/
+  baseURL: https://screendoor.dobt.co/api
+  tags:
+  - Statuses
+  properties:
+  - type: OpenAPI
+    url: openapi/department-of-better-technology-statuses-api-openapi.yml
+  - type: Authentication
+    url: authentication/department-of-better-technology-authentication.yml
+  - type: Conventions
+    url: conventions/department-of-better-technology-conventions.yml
+  - type: ErrorCatalog
+    url: errors/department-of-better-technology-problem-types.yml
+  - type: DataModel
+    url: data-model/department-of-better-technology-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -24,3 +196,52 @@ maintainers:
 common:
 - type: Website
   url: https://dobt.co
+- type: DeveloperPortal
+  url: https://help.dobt.co/
+- type: Documentation
+  url: https://help.dobt.co/
+- type: APIReference
+  url: https://dobtco.github.io/screendoor-api-docs/
+- type: Support
+  url: https://help.dobt.co/
+- type: Blog
+  url: https://www.dobt.co/blog/
+- type: GitHubOrganization
+  url: https://github.com/dobtco
+- type: StatusPage
+  url: https://status.dobt.co/
+- type: SignUp
+  url: https://screendoor.dobt.co/
+- type: PrivacyPolicy
+  url: https://dashboard.dobt.co/privacy
+- type: Authentication
+  url: authentication/department-of-better-technology-authentication.yml
+- type: Conventions
+  url: conventions/department-of-better-technology-conventions.yml
+- type: ErrorCatalog
+  url: errors/department-of-better-technology-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/department-of-better-technology-lifecycle.yml
+- type: DataModel
+  url: data-model/department-of-better-technology-data-model.yml
+- type: Conformance
+  url: conformance/department-of-better-technology-conformance.yml
+- type: Packages
+  url: packages/department-of-better-technology-packages.yml
+- type: MCPServer
+  url: mcp/department-of-better-technology-mcp.yml
+- type: WellKnown
+  url: well-known/department-of-better-technology-well-known.yml
+- type: LLMsTxt
+  url: llms/department-of-better-technology-llms.txt
+- type: Overlay
+  url: overlays/department-of-better-technology-screendoor-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/department-of-better-technology-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

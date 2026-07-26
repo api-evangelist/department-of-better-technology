@@ -1,0 +1,28 @@
+{
+  "provider": "department-of-better-technology",
+  "sources": [
+    "department-of-better-technology-files-api-openapi.yml",
+    "department-of-better-technology-forms-api-openapi.yml",
+    "department-of-better-technology-labels-api-openapi.yml",
+    "department-of-better-technology-projects-api-openapi.yml",
+    "department-of-better-technology-response-assignments-api-openapi.yml",
+    "department-of-better-technology-response-labels-api-openapi.yml",
+    "department-of-better-technology-responses-api-openapi.yml",
+    "department-of-better-technology-statuses-api-openapi.yml"
+  ],
+  "outputs": [
+    "department-of-better-technology-files-api-openapi.yml",
+    "department-of-better-technology-forms-api-openapi.yml",
+    "department-of-better-technology-labels-api-openapi.yml",
+    "department-of-better-technology-projects-api-openapi.yml",
+    "department-of-better-technology-response-assignments-api-openapi.yml",
+    "department-of-better-technology-response-labels-api-openapi.yml",
+    "department-of-better-technology-responses-api-openapi.yml",
+    "department-of-better-technology-statuses-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

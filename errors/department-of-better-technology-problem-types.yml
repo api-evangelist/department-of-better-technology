@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/department-of-better-technology-screendoor-openapi.yml
+format: custom-json-error
+notes: >-
+  Derived from the Screendoor OpenAPI error responses. Screendoor does NOT use RFC 9457
+  application/problem+json; it returns a plain JSON envelope { "error": "message" }, and on
+  validation failures a nested { "errors": { "<field>": ["message", ...] } } map. The
+  `type` URIs below are synthetic identifiers for cataloguing, not provider-published URLs.
+envelope:
+  content_type: application/json
+  shape: '{ "error": string, "errors"?: { "<field>": [string] } }'
+problems:
+  - status: 401
+    type: urn:screendoor:error:unauthorized
+    title: Unauthorized
+    detail: The api_key URL parameter is missing or invalid.
+    remediation: Pass a valid api_key (Screendoor -> Settings -> API Keys) on the request.
+  - status: 404
+    type: urn:screendoor:error:not-found
+    title: Not found
+    detail: The requested site, project, response, form, status, or label does not exist.
+  - status: 422
+    type: urn:screendoor:error:unprocessable-entity
+    title: Unprocessable entity
+    detail: >-
+      The request was well-formed but failed validation; the `errors` object maps each
+      offending field to its validation messages. Applies to create/update of projects,
+      responses, form fields, statuses, and labels.

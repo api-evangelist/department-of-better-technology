@@ -1,0 +1,39 @@
+# Department of Better Technology (CityBase Screendoor)
+
+> The Department of Better Technology builds Screendoor, a form-building and submission-management
+> platform used by government agencies and organizations (ProPublica, Los Angeles Times, the
+> Consumer Financial Protection Bureau, the Ford Foundation) to run paperless intake, evaluation,
+> and approval workflows. The Screendoor REST API programmatically manages projects, forms,
+> statuses, labels, responses (submissions), response labels, and response assignments. DOBT was
+> founded in 2013 by former Presidential Innovation Fellows and was acquired by CityBase.
+
+## APIs
+
+- [Screendoor API reference](https://dobtco.github.io/screendoor-api-docs/): REST API for projects, forms, statuses, labels, responses, and assignments. Base URL https://screendoor.dobt.co/api. API-key auth via the `api_key` URL parameter.
+
+## Specs
+
+- [Screendoor OpenAPI (generated)](openapi/department-of-better-technology-screendoor-openapi.yml): OpenAPI 3.0 generated from the published API reference; 40 operations across 8 tags.
+- [OpenAPI enhancements overlay](overlays/department-of-better-technology-screendoor-overlay.yaml): API Evangelist overlay of enhancements.
+
+## Artifacts
+
+- [Authentication profile](authentication/department-of-better-technology-authentication.yml): apiKey in query (`api_key`).
+- [API conventions](conventions/department-of-better-technology-conventions.yml): auth, pagination, versioning, and error-envelope semantics.
+- [Error catalog](errors/department-of-better-technology-problem-types.yml): 401 / 404 / 422 error responses.
+- [Lifecycle](lifecycle/department-of-better-technology-lifecycle.yml): versioning and status page.
+- [Data model](data-model/department-of-better-technology-data-model.yml): site -> project -> form/status/label/response entity graph.
+- [Conformance](conformance/department-of-better-technology-conformance.yml): standards posture.
+- [Packages](packages/department-of-better-technology-packages.yml): community Node client; first-party open-source building blocks.
+- [MCP candidate](mcp/department-of-better-technology-mcp.yml): derived candidate MCP tool list.
+- [Agent skills](skills/_index.yml): packaged operating instructions for marquee flows.
+
+## Docs
+
+- [Screendoor help center](https://help.dobt.co/): product documentation and guides.
+- [Screendoor product](https://www.dobt.co/screendoor/): product overview.
+- [Screendoor sign-in](https://screendoor.dobt.co/): application login (API keys under Settings -> API Keys).
+- [Status page](https://status.dobt.co/): Screendoor service status.
+- [Blog](https://www.dobt.co/blog/): Department of Better Technology blog.
+- [GitHub organization](https://github.com/dobtco): open-source repositories.
+- [Privacy policy](https://dashboard.dobt.co/privacy).

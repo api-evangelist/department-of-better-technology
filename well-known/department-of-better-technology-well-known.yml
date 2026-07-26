@@ -1,0 +1,35 @@
+generated: '2026-07-18'
+method: searched
+source: probe of /.well-known/* across Screendoor hosts
+notes: >-
+  Probed the standard discovery surface on the API host (screendoor.dobt.co), the help
+  host (help.dobt.co), and the status host (status.dobt.co). Only the status host returned
+  a security.txt, and that document is Atlassian Statuspage's boilerplate (the status page is
+  hosted on Statuspage.io), not a Department of Better Technology / Screendoor security program.
+  Saved verbatim for the record; it is NOT wired as DOBT's own SecurityTxt / vulnerability
+  disclosure. No OIDC, OAuth authorization-server, api-catalog, or ai-plugin documents exist.
+hosts:
+  - host: https://screendoor.dobt.co
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+  - host: https://help.dobt.co
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+  - host: https://status.dobt.co
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: department-of-better-technology-status-security.txt
+        provider: Atlassian Statuspage (third-party hosted status page)
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }

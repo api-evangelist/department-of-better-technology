@@ -1,0 +1,20 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/department-of-better-technology-screendoor-openapi.yml
+notes: >-
+  Packaged Agent Skills for the marquee Screendoor flows. Every step is grounded in a real
+  operationId verified against the OpenAPI. Screendoor uses api-key auth (query api_key),
+  offset pagination (page/per_page), and a plain JSON error envelope.
+skills:
+  - file: department-of-better-technology-build-a-form.md
+    name: Build a Screendoor form
+    api: openapi/department-of-better-technology-screendoor-openapi.yml
+    operations: [createProject, createFormField, updateForm, listForms]
+  - file: department-of-better-technology-collect-and-triage-submissions.md
+    name: Collect and triage submissions
+    api: openapi/department-of-better-technology-screendoor-openapi.yml
+    operations: [createResponse, listResponses, updateResponse, addResponseLabels, createStatus]
+  - file: department-of-better-technology-assign-and-review.md
+    name: Assign and review a submission
+    api: openapi/department-of-better-technology-screendoor-openapi.yml
+    operations: [getResponse, addResponseAssignments, updateResponse, listResponseAssignments]

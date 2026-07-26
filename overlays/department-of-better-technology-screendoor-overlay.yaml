@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Screendoor
+  version: 1.0.0
+extends: openapi/department-of-better-technology-screendoor-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-07-18'
+      x-api-provider: Department of Better Technology (CityBase Screendoor)
+      x-artifacts:
+        authentication: authentication/department-of-better-technology-authentication.yml
+        conventions: conventions/department-of-better-technology-conventions.yml
+        errors: errors/department-of-better-technology-problem-types.yml
+        lifecycle: lifecycle/department-of-better-technology-lifecycle.yml
+        data_model: data-model/department-of-better-technology-data-model.yml
+  - target: $.info
+    update:
+      x-agent-notes: >-
+        Screendoor uses API-key auth in the query string (api_key), offset pagination
+        (page / per_page, max 100) with RFC 5988 Link headers, and a plain JSON error
+        envelope ({ "error": "..." }, with a nested "errors" map on 422). No idempotency
+        key, OAuth scopes, or webhook/event surface are documented.

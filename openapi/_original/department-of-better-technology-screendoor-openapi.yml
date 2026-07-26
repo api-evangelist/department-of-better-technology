@@ -1,0 +1,993 @@
+openapi: 3.0.3
+info:
+  title: Screendoor API
+  description: >-
+    The Screendoor API from the Department of Better Technology (CityBase Screendoor)
+    lets you programmatically manage online forms, submissions ("responses"), evaluation
+    workflows, statuses, labels, and assignments. Screendoor is used by government agencies
+    and organizations to build paperless forms and manage intake, review, and approval
+    processes. All endpoints are relative to the base URL and authenticated with an API key
+    passed as the `api_key` URL parameter.
+  version: '1'
+  contact:
+    name: Department of Better Technology (CityBase)
+    url: https://help.dobt.co/
+  x-api-version-header: 'Api-Version: 1'
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://dobtco.github.io/screendoor-api-docs/
+servers:
+  - url: https://screendoor.dobt.co/api
+    description: Screendoor production API
+security:
+  - apiKeyAuth: []
+tags:
+  - name: Projects
+    description: Manage projects (forms and their workflow) within a site.
+  - name: Forms
+    description: Manage the form fields collected for a project.
+  - name: Statuses
+    description: Manage the status workflow stages for a project's responses.
+  - name: Labels
+    description: Manage labels used to tag responses within a project.
+  - name: Responses
+    description: Create, read, update, trash, and recover form submissions.
+  - name: Response Labels
+    description: Attach or detach labels on an individual response.
+  - name: Response Assignments
+    description: Assign users or teams to an individual response.
+  - name: Files
+    description: Upload files referenced by response fields.
+paths:
+  /sites/{site_id}/projects:
+    parameters:
+      - $ref: '#/components/parameters/SiteId'
+    get:
+      operationId: listProjects
+      summary: List projects
+      description: Returns a paginated list of the projects belonging to a site.
+      tags: [Projects]
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: A paginated list of projects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: createProject
+      summary: Create a project
+      description: Creates a new project within the site.
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProjectWrite' }
+      responses:
+        '201':
+          description: The created project.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /sites/{site_id}/projects/{project_id}:
+    parameters:
+      - $ref: '#/components/parameters/SiteId'
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: getProject
+      summary: Retrieve a project
+      description: Returns a single project by id.
+      tags: [Projects]
+      responses:
+        '200':
+          description: The requested project.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      operationId: updateProject
+      summary: Update a project
+      description: Updates the attributes of an existing project.
+      tags: [Projects]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProjectWrite' }
+      responses:
+        '200':
+          description: The updated project.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    delete:
+      operationId: deleteProject
+      summary: Delete a project
+      description: Permanently deletes a project.
+      tags: [Projects]
+      responses:
+        '204': { description: The project was deleted. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/forms:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listForms
+      summary: List a project's forms
+      description: Returns the forms defined for a project.
+      tags: [Forms]
+      responses:
+        '200':
+          description: A list of forms.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Form' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/forms/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/PathId'
+    get:
+      operationId: getForm
+      summary: Retrieve a form
+      description: Returns a single form and its field data.
+      tags: [Forms]
+      responses:
+        '200':
+          description: The requested form.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Form' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      operationId: updateForm
+      summary: Update a form
+      description: Replaces the field data of a form.
+      tags: [Forms]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_data:
+                  type: array
+                  items: { $ref: '#/components/schemas/FormField' }
+      responses:
+        '200':
+          description: The updated form.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Form' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /projects/{project_id}/form/fields:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: createFormField
+      summary: Add a field to the initial form
+      description: Adds a new field to the project's initial form at an optional position.
+      tags: [Forms]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_data: { $ref: '#/components/schemas/FormField' }
+                position: { type: integer, description: Zero-based insertion index. }
+      responses:
+        '201':
+          description: The created field.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FormField' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /projects/{project_id}/form/fields/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/PathId'
+    put:
+      operationId: updateFormField
+      summary: Update a form field
+      description: Updates a single field on the initial form.
+      tags: [Forms]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_data: { $ref: '#/components/schemas/FormField' }
+      responses:
+        '200':
+          description: The updated field.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FormField' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      operationId: deleteFormField
+      summary: Delete a form field
+      description: Removes a field from the initial form.
+      tags: [Forms]
+      responses:
+        '204': { description: The field was deleted. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/statuses:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listStatuses
+      summary: List statuses
+      description: Returns the status workflow stages for a project.
+      tags: [Statuses]
+      responses:
+        '200':
+          description: A list of statuses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Status' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: createStatus
+      summary: Create a status
+      description: Adds a new status to the project's workflow.
+      tags: [Statuses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string }
+      responses:
+        '201':
+          description: The created status.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Status' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /projects/{project_id}/statuses/reorder:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: reorderStatuses
+      summary: Reorder statuses
+      description: Sets the order of a project's statuses.
+      tags: [Statuses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [names]
+              properties:
+                names:
+                  type: array
+                  items: { type: string }
+      responses:
+        '200':
+          description: The reordered list of statuses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Status' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /projects/{project_id}/statuses/{name}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/PathName'
+    get:
+      operationId: getStatus
+      summary: Retrieve a status
+      description: Returns a single status by name.
+      tags: [Statuses]
+      responses:
+        '200':
+          description: The requested status.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Status' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      operationId: updateStatus
+      summary: Update a status
+      description: Renames a status.
+      tags: [Statuses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+      responses:
+        '200':
+          description: The updated status.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Status' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    delete:
+      operationId: deleteStatus
+      summary: Delete a status
+      description: Removes a status from the project's workflow.
+      tags: [Statuses]
+      responses:
+        '204': { description: The status was deleted. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/labels:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listLabels
+      summary: List labels
+      description: Returns the labels defined for a project.
+      tags: [Labels]
+      responses:
+        '200':
+          description: A list of labels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ProjectLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: createLabel
+      summary: Create a label
+      description: Creates a new label for the project.
+      tags: [Labels]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProjectLabelWrite' }
+      responses:
+        '201':
+          description: The created label.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProjectLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /projects/{project_id}/labels/{name}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/PathName'
+    get:
+      operationId: getLabel
+      summary: Retrieve a label
+      description: Returns a single label by name.
+      tags: [Labels]
+      responses:
+        '200':
+          description: The requested label.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProjectLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      operationId: updateLabel
+      summary: Update a label
+      description: Updates the name or color of a label.
+      tags: [Labels]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProjectLabelWrite' }
+      responses:
+        '200':
+          description: The updated label.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProjectLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    delete:
+      operationId: deleteLabel
+      summary: Delete a label
+      description: Removes a label from the project.
+      tags: [Labels]
+      responses:
+        '204': { description: The label was deleted. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/responses:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listResponses
+      summary: List responses
+      description: Returns a paginated list of a project's responses (submissions).
+      tags: [Responses]
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - name: sort
+          in: query
+          description: Field to sort by.
+          schema: { type: string }
+        - name: direction
+          in: query
+          description: Sort direction.
+          schema: { type: string, enum: [asc, desc] }
+        - name: trash
+          in: query
+          description: Return trashed responses instead of active ones.
+          schema: { type: boolean }
+        - name: advanced_search
+          in: query
+          description: Advanced search query string.
+          schema: { type: string }
+      responses:
+        '200':
+          description: A paginated list of responses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Response' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: createResponse
+      summary: Create a response
+      description: Submits a new response to a project's form.
+      tags: [Responses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ResponseWrite' }
+      responses:
+        '201':
+          description: The created response.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ResponseDetailed' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+  /projects/{project_id}/responses/{response_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ResponseId'
+    get:
+      operationId: getResponse
+      summary: Retrieve a response
+      description: Returns a single response, optionally in a detailed format.
+      tags: [Responses]
+      parameters:
+        - name: response_format
+          in: query
+          description: Use `detailed` to include assignees, archived responses, and more.
+          schema: { type: string, enum: [detailed] }
+      responses:
+        '200':
+          description: The requested response.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ResponseDetailed' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      operationId: updateResponse
+      summary: Update a response
+      description: Updates the field values, status, or labels of a response.
+      tags: [Responses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ResponseWrite' }
+      responses:
+        '200':
+          description: The updated response.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ResponseDetailed' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    delete:
+      operationId: trashResponse
+      summary: Move a response to trash
+      description: Moves a response to the trash (recoverable).
+      tags: [Responses]
+      responses:
+        '204': { description: The response was moved to trash. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/responses/{response_id}/recover:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ResponseId'
+    post:
+      operationId: recoverResponse
+      summary: Recover a response from trash
+      description: Restores a trashed response.
+      tags: [Responses]
+      responses:
+        '200':
+          description: The recovered response.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Response' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /projects/{project_id}/responses/{response_id}/delete_forever:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ResponseId'
+    delete:
+      operationId: deleteResponseForever
+      summary: Permanently delete a response
+      description: Permanently deletes a response. This cannot be undone.
+      tags: [Responses]
+      responses:
+        '204': { description: The response was permanently deleted. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /responses/{response_id}/labels:
+    parameters:
+      - $ref: '#/components/parameters/ResponseId'
+    get:
+      operationId: listResponseLabels
+      summary: List a response's labels
+      tags: [Response Labels]
+      responses:
+        '200':
+          description: The labels on the response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ResponseLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: addResponseLabels
+      summary: Add labels to a response
+      tags: [Response Labels]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LabelNames' }
+      responses:
+        '200':
+          description: The updated set of labels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ResponseLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    put:
+      operationId: replaceResponseLabels
+      summary: Replace a response's labels
+      tags: [Response Labels]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LabelNames' }
+      responses:
+        '200':
+          description: The replaced set of labels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ResponseLabel' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    delete:
+      operationId: removeAllResponseLabels
+      summary: Remove all labels from a response
+      tags: [Response Labels]
+      responses:
+        '204': { description: All labels were removed. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /responses/{response_id}/labels/{name}:
+    parameters:
+      - $ref: '#/components/parameters/ResponseId'
+      - $ref: '#/components/parameters/PathName'
+    delete:
+      operationId: removeResponseLabel
+      summary: Remove a label from a response
+      tags: [Response Labels]
+      responses:
+        '204': { description: The label was removed. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /responses/{response_id}/assignments:
+    parameters:
+      - $ref: '#/components/parameters/ResponseId'
+    get:
+      operationId: listResponseAssignments
+      summary: List a response's assignees
+      tags: [Response Assignments]
+      responses:
+        '200':
+          description: The users/teams assigned to the response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Assignee' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      operationId: addResponseAssignments
+      summary: Add assignees to a response
+      description: Adds assignees. Each entry has the form "Type,id" (e.g. "User,10").
+      tags: [Response Assignments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AssigneeNames' }
+      responses:
+        '200':
+          description: The updated set of assignees.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Assignee' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    put:
+      operationId: replaceResponseAssignments
+      summary: Replace a response's assignees
+      tags: [Response Assignments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AssigneeNames' }
+      responses:
+        '200':
+          description: The replaced set of assignees.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Assignee' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+    delete:
+      operationId: removeAllResponseAssignments
+      summary: Remove all assignees from a response
+      tags: [Response Assignments]
+      responses:
+        '204': { description: All assignees were removed. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /responses/{response_id}/assignments/{assignment_parameter}:
+    parameters:
+      - $ref: '#/components/parameters/ResponseId'
+      - name: assignment_parameter
+        in: path
+        required: true
+        description: The assignee identifier in "Type,id" form.
+        schema: { type: string }
+    delete:
+      operationId: removeResponseAssignment
+      summary: Remove an assignee from a response
+      tags: [Response Assignments]
+      responses:
+        '204': { description: The assignee was removed. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /form_renderer/file:
+    post:
+      operationId: uploadFile
+      summary: Upload a file
+      description: Uploads a file to be referenced by a File-type response field.
+      tags: [Files]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [response_field_id, file]
+              properties:
+                response_field_id:
+                  type: integer
+                  description: The id of the File response field.
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: The uploaded file reference.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: integer }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: api_key
+      description: >-
+        Your Screendoor API key, obtained in Screendoor under Settings -> API Keys,
+        passed as the `api_key` URL parameter on every request.
+  parameters:
+    SiteId:
+      name: site_id
+      in: path
+      required: true
+      description: The id of the site.
+      schema: { type: integer }
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema: { type: integer }
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema: { type: integer }
+    PathId:
+      name: id
+      in: path
+      required: true
+      description: The id of the resource.
+      schema: { type: string }
+    PathName:
+      name: name
+      in: path
+      required: true
+      description: The name of the resource (URL-encoded).
+      schema: { type: string }
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema: { type: integer, default: 1 }
+    PerPage:
+      name: per_page
+      in: query
+      description: The number of records per page (max 100).
+      schema: { type: integer, default: 25, maximum: 100 }
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ValidationError' }
+  schemas:
+    Project:
+      type: object
+      properties:
+        id: { type: integer }
+        sequential_id: { type: integer }
+        name: { type: string }
+        slug: { type: string }
+        description: { type: string, nullable: true }
+        summary: { type: string, nullable: true }
+        specifics: { type: object }
+        visibility: { type: string, example: not_posted }
+        responses_due_at: { type: string, format: date-time, nullable: true }
+        enable_qa: { type: boolean }
+        questions_due_at: { type: string, format: date-time, nullable: true }
+        require_registration: { type: boolean }
+        key_response_field_id: { type: integer, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+        submitted_responses_count: { type: integer }
+        show_respondents: { type: boolean }
+        show_askers: { type: boolean }
+        email_responses: { type: integer }
+    ProjectWrite:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+    Form:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string, nullable: true }
+        field_data:
+          type: array
+          items: { $ref: '#/components/schemas/FormField' }
+    FormField:
+      type: object
+      properties:
+        id: { type: string }
+        type: { type: string, example: field }
+        field_type:
+          type: string
+          description: The kind of field.
+          example: paragraph
+        label: { type: string }
+    Status:
+      type: object
+      properties:
+        name: { type: string }
+        responses_count: { type: integer }
+    ProjectLabel:
+      type: object
+      properties:
+        name: { type: string }
+        color: { type: string, description: Hex color without leading '#'. }
+        responses_count: { type: integer }
+    ProjectLabelWrite:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        color: { type: string }
+    ResponseLabel:
+      type: object
+      properties:
+        name: { type: string }
+        color: { type: string }
+    LabelNames:
+      type: object
+      required: [labels]
+      properties:
+        labels:
+          type: array
+          items: { type: string }
+    Assignee:
+      type: object
+      properties:
+        type: { type: string, enum: [User, Team] }
+        id: { type: integer }
+        name: { type: string }
+    AssigneeNames:
+      type: object
+      required: [assignees]
+      properties:
+        assignees:
+          type: array
+          description: Each entry has the form "Type,id" (e.g. "User,10").
+          items: { type: string }
+    SubmissionSource:
+      type: object
+      properties:
+        type: { type: string, example: frontend }
+        hostname: { type: string }
+    Response:
+      type: object
+      properties:
+        id: { type: integer }
+        sequential_id: { type: integer }
+        project_id: { type: integer }
+        form_id: { type: integer, nullable: true }
+        initial_form_id: { type: integer, nullable: true }
+        pretty_id: { type: string }
+        submitted_at: { type: string, format: date-time, nullable: true }
+        responses:
+          type: object
+          description: Map of field id (string) to submitted value.
+          additionalProperties: true
+        rating_aggregates: { type: object }
+        average_rating: { type: number, nullable: true }
+        num_ratings: { type: integer }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+        status: { type: string }
+        labels:
+          type: array
+          items: { $ref: '#/components/schemas/ResponseLabel' }
+        user: { type: object, nullable: true }
+        submission_source: { $ref: '#/components/schemas/SubmissionSource' }
+    ResponseDetailed:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            archived_responses:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: integer }
+                  responses_updated_at: { type: string, format: date-time }
+                  responses: { type: object }
+            assignees:
+              type: array
+              items: { $ref: '#/components/schemas/Assignee' }
+    ResponseWrite:
+      type: object
+      properties:
+        response_fields:
+          type: object
+          description: Map of field id (string) to submitted value.
+          additionalProperties: true
+        status: { type: string }
+        labels:
+          type: array
+          items: { type: string }
+        skip_email_confirmation: { type: boolean }
+        skip_notifications: { type: boolean }
+        skip_validation: { type: boolean }
+        force_validation: { type: boolean }
+    Error:
+      type: object
+      properties:
+        error: { type: string, description: A human-readable error message. }
+    ValidationError:
+      type: object
+      properties:
+        error: { type: string }
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items: { type: string }

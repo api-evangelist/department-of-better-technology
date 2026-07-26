@@ -1,0 +1,22 @@
+generated: '2026-07-18'
+method: searched
+source: https://dobtco.github.io/screendoor-api-docs/ + https://status.dobt.co/
+notes: >-
+  Screendoor exposes an explicit API version (current v1), selectable via the `?v=1` query
+  parameter or the `Api-Version: 1` request header. No public deprecation policy, Sunset
+  header support, or SLA document was found, so no `Deprecation` pointer is emitted. A public
+  status page is hosted on Statuspage.io.
+versioning:
+  scheme: header-or-query
+  current: '1'
+  selector_header: 'Api-Version: 1'
+  selector_query: '?v=1'
+  docs: https://dobtco.github.io/screendoor-api-docs/
+deprecation:
+  policy_url: null
+  sunset_header: false
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.dobt.co/
+deprecated_operations: []

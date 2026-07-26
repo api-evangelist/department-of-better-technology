@@ -1,0 +1,90 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/department-of-better-technology-screendoor-openapi.yml + https://dobtco.github.io/screendoor-api-docs/
+notes: >-
+  Entity-relationship graph derived from Screendoor OpenAPI path nesting, schema fields, and
+  id-reference fields (project_id, form_id, response_id). Screendoor uses integer ids; responses
+  additionally carry a short `pretty_id` string.
+entities:
+  - name: Site
+    id_field: site_id
+    description: Top-level tenant that owns projects.
+  - name: Project
+    id_field: id
+    description: A form and its submission-management workflow within a site.
+    id_prefix: null
+  - name: Form
+    id_field: id
+    description: The set of fields collected for a project (initial form + additional forms).
+  - name: FormField
+    id_field: id
+    description: A single input on a form (paragraph, checkboxes, address, file, etc.).
+  - name: Status
+    id_field: name
+    description: A workflow stage in a project, keyed by name.
+  - name: ProjectLabel
+    id_field: name
+    description: A tag definition available within a project, keyed by name.
+  - name: Response
+    id_field: id
+    pretty_id_field: pretty_id
+    description: A form submission, with field values, status, labels, and assignees.
+  - name: ResponseLabel
+    id_field: name
+    description: A label applied to an individual response.
+  - name: Assignee
+    id_field: id
+    description: A User or Team assigned to review a response.
+relationships:
+  - from: Project
+    to: Site
+    type: belongs_to
+    via: site_id
+  - from: Site
+    to: Project
+    type: has_many
+    via: site_id
+  - from: Form
+    to: Project
+    type: belongs_to
+    via: project_id
+  - from: Project
+    to: Form
+    type: has_many
+    via: project_id
+  - from: FormField
+    to: Form
+    type: belongs_to
+    via: form_id
+  - from: Form
+    to: FormField
+    type: has_many
+    via: field_data
+  - from: Status
+    to: Project
+    type: belongs_to
+    via: project_id
+  - from: ProjectLabel
+    to: Project
+    type: belongs_to
+    via: project_id
+  - from: Response
+    to: Project
+    type: belongs_to
+    via: project_id
+  - from: Response
+    to: Form
+    type: belongs_to
+    via: form_id
+  - from: Project
+    to: Response
+    type: has_many
+    via: project_id
+  - from: Response
+    to: ResponseLabel
+    type: has_many
+    via: labels
+  - from: Response
+    to: Assignee
+    type: has_many
+    via: assignees
