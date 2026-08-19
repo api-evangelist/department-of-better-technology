@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Screendoor Files Response Labels API",
+    "version": "1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Response Labels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a response's labels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/labels",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "List a response's labels"
+        },
+        {
+          "info": {
+            "name": "Add labels to a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/labels",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add labels to a response"
+        },
+        {
+          "info": {
+            "name": "Replace a response's labels",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/labels",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Replace a response's labels"
+        },
+        {
+          "info": {
+            "name": "Remove all labels from a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/labels",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "Remove all labels from a response"
+        },
+        {
+          "info": {
+            "name": "Remove a label from a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/labels/:name",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource (URL-encoded)."
+              }
+            ]
+          },
+          "docs": "Remove a label from a response"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

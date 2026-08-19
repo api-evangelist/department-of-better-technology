@@ -1,0 +1,239 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Screendoor Files Responses API",
+    "version": "1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Responses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page of results to return."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of records per page (max 100)."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Field to sort by."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction."
+              },
+              {
+                "name": "trash",
+                "value": "",
+                "type": "query",
+                "description": "Return trashed responses instead of active ones."
+              },
+              {
+                "name": "advanced_search",
+                "value": "",
+                "type": "query",
+                "description": "Advanced search query string."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of a project's responses (submissions)."
+        },
+        {
+          "info": {
+            "name": "Create a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a new response to a project's form."
+        },
+        {
+          "info": {
+            "name": "Retrieve a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses/:response_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              },
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              },
+              {
+                "name": "response_format",
+                "value": "",
+                "type": "query",
+                "description": "Use `detailed` to include assignees, archived responses, and more."
+              }
+            ]
+          },
+          "docs": "Returns a single response, optionally in a detailed format."
+        },
+        {
+          "info": {
+            "name": "Update a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses/:response_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              },
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the field values, status, or labels of a response."
+        },
+        {
+          "info": {
+            "name": "Move a response to trash",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses/:response_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              },
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "Moves a response to the trash (recoverable)."
+        },
+        {
+          "info": {
+            "name": "Recover a response from trash",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses/:response_id/recover",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              },
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "Restores a trashed response."
+        },
+        {
+          "info": {
+            "name": "Permanently delete a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://screendoor.dobt.co/api/projects/:project_id/responses/:response_id/delete_forever",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the project."
+              },
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a response. This cannot be undone."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

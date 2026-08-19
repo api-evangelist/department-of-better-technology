@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Screendoor Files Response Assignments API",
+    "version": "1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Response Assignments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a response's assignees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/assignments",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "List a response's assignees"
+        },
+        {
+          "info": {
+            "name": "Add assignees to a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/assignments",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds assignees. Each entry has the form \"Type,id\" (e.g. \"User,10\")."
+        },
+        {
+          "info": {
+            "name": "Replace a response's assignees",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/assignments",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Replace a response's assignees"
+        },
+        {
+          "info": {
+            "name": "Remove all assignees from a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/assignments",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              }
+            ]
+          },
+          "docs": "Remove all assignees from a response"
+        },
+        {
+          "info": {
+            "name": "Remove an assignee from a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://screendoor.dobt.co/api/responses/:response_id/assignments/:assignment_parameter",
+            "params": [
+              {
+                "name": "response_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the response."
+              },
+              {
+                "name": "assignment_parameter",
+                "value": "",
+                "type": "path",
+                "description": "The assignee identifier in \"Type,id\" form."
+              }
+            ]
+          },
+          "docs": "Remove an assignee from a response"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
