@@ -38,6 +38,17 @@ tags:
 - Government
 - GovTech
 - Civic Technology
+- Workflows
+- Data Collection
+- Screendoor
+- Public Sector
+- Forms API
+tags_raw:
+- Company
+- Forms
+- Government
+- GovTech
+- Civic Technology
 - Workflow
 - Data Collection
 - Screendoor
@@ -50,6 +61,8 @@ apis:
   humanURL: https://dobtco.github.io/screendoor-api-docs/
   baseURL: https://screendoor.dobt.co/api
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -104,6 +117,8 @@ apis:
   humanURL: https://dobtco.github.io/screendoor-api-docs/
   baseURL: https://screendoor.dobt.co/api
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -176,6 +191,8 @@ apis:
   humanURL: https://dobtco.github.io/screendoor-api-docs/
   baseURL: https://screendoor.dobt.co/api
   tags:
+  - Status
+  tags_raw:
   - Statuses
   properties:
   - type: OpenAPI
