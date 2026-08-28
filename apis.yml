@@ -9,6 +9,18 @@ description: >-
   sites, projects, forms and form fields, workflow statuses, labels, responses (submissions),
   response labels, and reviewer assignments, using API-key authentication, offset pagination with
   RFC 5988 Link headers, and an explicit API version.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
