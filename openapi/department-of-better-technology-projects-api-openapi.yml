@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Screendoor Files Projects API
+  title: Screendoor Projects API
   description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
   version: '1'
   contact:
@@ -128,6 +128,36 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    SiteId:
+      name: site_id
+      in: path
+      required: true
+      description: The id of the site.
+      schema:
+        type: integer
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
+    PerPage:
+      name: per_page
+      in: query
+      description: The number of records per page (max 100).
+      schema:
+        type: integer
+        default: 25
+        maximum: 100
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
   responses:
     Unauthorized:
       description: The API key is missing or invalid.
@@ -148,6 +178,62 @@ components:
           schema:
             $ref: '#/components/schemas/ValidationError'
   schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        sequential_id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        summary:
+          type:
+          - string
+          - 'null'
+        specifics:
+          type: object
+        visibility:
+          type: string
+          example: not_posted
+        responses_due_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        enable_qa:
+          type: boolean
+        questions_due_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        require_registration:
+          type: boolean
+        key_response_field_id:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        submitted_responses_count:
+          type: integer
+        show_respondents:
+          type: boolean
+        show_askers:
+          type: boolean
+        email_responses:
+          type: integer
     ValidationError:
       type: object
       properties:
@@ -166,95 +252,15 @@ components:
         name:
           type: string
         description:
-          type: string
-          nullable: true
-    Project:
-      type: object
-      properties:
-        id:
-          type: integer
-        sequential_id:
-          type: integer
-        name:
-          type: string
-        slug:
-          type: string
-        description:
-          type: string
-          nullable: true
-        summary:
-          type: string
-          nullable: true
-        specifics:
-          type: object
-        visibility:
-          type: string
-          example: not_posted
-        responses_due_at:
-          type: string
-          format: date-time
-          nullable: true
-        enable_qa:
-          type: boolean
-        questions_due_at:
-          type: string
-          format: date-time
-          nullable: true
-        require_registration:
-          type: boolean
-        key_response_field_id:
-          type: integer
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        submitted_responses_count:
-          type: integer
-        show_respondents:
-          type: boolean
-        show_askers:
-          type: boolean
-        email_responses:
-          type: integer
+          type:
+          - string
+          - 'null'
     Error:
       type: object
       properties:
         error:
           type: string
           description: A human-readable error message.
-  parameters:
-    PerPage:
-      name: per_page
-      in: query
-      description: The number of records per page (max 100).
-      schema:
-        type: integer
-        default: 25
-        maximum: 100
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The id of the project.
-      schema:
-        type: integer
-    SiteId:
-      name: site_id
-      in: path
-      required: true
-      description: The id of the site.
-      schema:
-        type: integer
-    Page:
-      name: page
-      in: query
-      description: The page of results to return.
-      schema:
-        type: integer
-        default: 1
   securitySchemes:
     apiKeyAuth:
       type: apiKey

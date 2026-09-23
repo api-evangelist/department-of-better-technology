@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Screendoor Files API
   description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
@@ -59,19 +59,25 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
 components:
   responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     UnprocessableEntity:
       description: The request was well-formed but failed validation.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
     ValidationError:
       type: object
       properties:
@@ -84,12 +90,6 @@ components:
             type: array
             items:
               type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

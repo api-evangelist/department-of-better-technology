@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Screendoor Files Response Assignments API
+  title: Screendoor Response Assignments API
   description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
   version: '1'
   contact:
@@ -125,18 +125,16 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Assignee:
+    AssigneeNames:
       type: object
+      required:
+      - assignees
       properties:
-        type:
-          type: string
-          enum:
-          - User
-          - Team
-        id:
-          type: integer
-        name:
-          type: string
+        assignees:
+          type: array
+          description: Each entry has the form "Type,id" (e.g. "User,10").
+          items:
+            type: string
     ValidationError:
       type: object
       properties:
@@ -149,16 +147,18 @@ components:
             type: array
             items:
               type: string
-    AssigneeNames:
+    Assignee:
       type: object
-      required:
-      - assignees
       properties:
-        assignees:
-          type: array
-          description: Each entry has the form "Type,id" (e.g. "User,10").
-          items:
-            type: string
+        type:
+          type: string
+          enum:
+          - User
+          - Team
+        id:
+          type: integer
+        name:
+          type: string
     Error:
       type: object
       properties:

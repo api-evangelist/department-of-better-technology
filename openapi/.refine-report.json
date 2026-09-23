@@ -1,14 +1,7 @@
 {
   "provider": "department-of-better-technology",
   "sources": [
-    "department-of-better-technology-files-api-openapi.yml",
-    "department-of-better-technology-forms-api-openapi.yml",
-    "department-of-better-technology-labels-api-openapi.yml",
-    "department-of-better-technology-projects-api-openapi.yml",
-    "department-of-better-technology-response-assignments-api-openapi.yml",
-    "department-of-better-technology-response-labels-api-openapi.yml",
-    "department-of-better-technology-responses-api-openapi.yml",
-    "department-of-better-technology-statuses-api-openapi.yml"
+    "_original/department-of-better-technology-screendoor-openapi.yml"
   ],
   "outputs": [
     "department-of-better-technology-files-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "department-of-better-technology-screendoor-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "department-of-better-technology-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-forms-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-labels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-response-assignments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-response-labels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-responses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "department-of-better-technology-statuses-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

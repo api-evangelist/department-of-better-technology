@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Screendoor Files Labels API
+  title: Screendoor Labels API
   description: The Screendoor API from the Department of Better Technology (CityBase Screendoor) lets you programmatically manage online forms, submissions ("responses"), evaluation workflows, statuses, labels, and assignments. Screendoor is used by government agencies and organizations to build paperless forms and manage intake, review, and approval processes. All endpoints are relative to the base URL and authenticated with an API key passed as the `api_key` URL parameter.
   version: '1'
   contact:
@@ -126,6 +126,15 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ProjectLabelWrite:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        color:
+          type: string
     ProjectLabel:
       type: object
       properties:
@@ -148,15 +157,6 @@ components:
             type: array
             items:
               type: string
-    ProjectLabelWrite:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        color:
-          type: string
     Error:
       type: object
       properties:
@@ -164,13 +164,6 @@ components:
           type: string
           description: A human-readable error message.
   parameters:
-    PathName:
-      name: name
-      in: path
-      required: true
-      description: The name of the resource (URL-encoded).
-      schema:
-        type: string
     ProjectId:
       name: project_id
       in: path
@@ -178,6 +171,13 @@ components:
       description: The id of the project.
       schema:
         type: integer
+    PathName:
+      name: name
+      in: path
+      required: true
+      description: The name of the resource (URL-encoded).
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: The API key is missing or invalid.
