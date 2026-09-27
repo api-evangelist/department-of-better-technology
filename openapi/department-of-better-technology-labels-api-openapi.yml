@@ -125,26 +125,22 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    PathName:
+      name: name
+      in: path
+      required: true
+      description: The name of the resource (URL-encoded).
+      schema:
+        type: string
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
   schemas:
-    ProjectLabelWrite:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        color:
-          type: string
-    ProjectLabel:
-      type: object
-      properties:
-        name:
-          type: string
-        color:
-          type: string
-          description: Hex color without leading '#'.
-        responses_count:
-          type: integer
     ValidationError:
       type: object
       properties:
@@ -157,27 +153,31 @@ components:
             type: array
             items:
               type: string
+    ProjectLabel:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+          description: Hex color without leading '#'.
+        responses_count:
+          type: integer
     Error:
       type: object
       properties:
         error:
           type: string
           description: A human-readable error message.
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The id of the project.
-      schema:
-        type: integer
-    PathName:
-      name: name
-      in: path
-      required: true
-      description: The name of the resource (URL-encoded).
-      schema:
-        type: string
+    ProjectLabelWrite:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        color:
+          type: string
   responses:
     Unauthorized:
       description: The API key is missing or invalid.

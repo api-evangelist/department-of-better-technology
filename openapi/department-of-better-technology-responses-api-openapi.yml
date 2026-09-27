@@ -197,56 +197,80 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The id of the project.
-      schema:
-        type: integer
-    PerPage:
-      name: per_page
-      in: query
-      description: The number of records per page (max 100).
-      schema:
-        type: integer
-        default: 25
-        maximum: 100
-    ResponseId:
-      name: response_id
-      in: path
-      required: true
-      description: The id of the response.
-      schema:
-        type: integer
-    Page:
-      name: page
-      in: query
-      description: The page of results to return.
-      schema:
-        type: integer
-        default: 1
-  responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
   schemas:
+    ResponseLabel:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+    Assignee:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - User
+          - Team
+        id:
+          type: integer
+        name:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    ResponseDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Response'
+      - type: object
+        properties:
+          archived_responses:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                responses_updated_at:
+                  type: string
+                  format: date-time
+                responses:
+                  type: object
+          assignees:
+            type: array
+            items:
+              $ref: '#/components/schemas/Assignee'
+    ResponseWrite:
+      type: object
+      properties:
+        response_fields:
+          type: object
+          description: Map of field id (string) to submitted value.
+          additionalProperties: true
+        status:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        skip_email_confirmation:
+          type: boolean
+        skip_notifications:
+          type: boolean
+        skip_validation:
+          type: boolean
+        force_validation:
+          type: boolean
     Response:
       type: object
       properties:
@@ -301,39 +325,12 @@ components:
           - 'null'
         submission_source:
           $ref: '#/components/schemas/SubmissionSource'
-    ValidationError:
+    Error:
       type: object
       properties:
         error:
           type: string
-        errors:
-          type: object
-          description: Map of field name to an array of validation messages.
-          additionalProperties:
-            type: array
-            items:
-              type: string
-    ResponseWrite:
-      type: object
-      properties:
-        response_fields:
-          type: object
-          description: Map of field id (string) to submitted value.
-          additionalProperties: true
-        status:
-          type: string
-        labels:
-          type: array
-          items:
-            type: string
-        skip_email_confirmation:
-          type: boolean
-        skip_notifications:
-          type: boolean
-        skip_validation:
-          type: boolean
-        force_validation:
-          type: boolean
+          description: A human-readable error message.
     SubmissionSource:
       type: object
       properties:
@@ -342,52 +339,55 @@ components:
           example: frontend
         hostname:
           type: string
-    Assignee:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - User
-          - Team
-        id:
-          type: integer
-        name:
-          type: string
-    ResponseDetailed:
-      allOf:
-      - $ref: '#/components/schemas/Response'
-      - type: object
-        properties:
-          archived_responses:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                responses_updated_at:
-                  type: string
-                  format: date-time
-                responses:
-                  type: object
-          assignees:
-            type: array
-            items:
-              $ref: '#/components/schemas/Assignee'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
-    ResponseLabel:
-      type: object
-      properties:
-        name:
-          type: string
-        color:
-          type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+  parameters:
+    PerPage:
+      name: per_page
+      in: query
+      description: The number of records per page (max 100).
+      schema:
+        type: integer
+        default: 25
+        maximum: 100
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
   securitySchemes:
     apiKeyAuth:
       type: apiKey

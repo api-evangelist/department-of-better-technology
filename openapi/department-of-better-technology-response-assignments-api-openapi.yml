@@ -125,28 +125,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    AssigneeNames:
-      type: object
-      required:
-      - assignees
-      properties:
-        assignees:
-          type: array
-          description: Each entry has the form "Type,id" (e.g. "User,10").
-          items:
-            type: string
-    ValidationError:
-      type: object
-      properties:
-        error:
-          type: string
-        errors:
-          type: object
-          description: Map of field name to an array of validation messages.
-          additionalProperties:
-            type: array
-            items:
-              type: string
     Assignee:
       type: object
       properties:
@@ -159,6 +137,28 @@ components:
           type: integer
         name:
           type: string
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    AssigneeNames:
+      type: object
+      required:
+      - assignees
+      properties:
+        assignees:
+          type: array
+          description: Each entry has the form "Type,id" (e.g. "User,10").
+          items:
+            type: string
     Error:
       type: object
       properties:
@@ -166,14 +166,14 @@ components:
           type: string
           description: A human-readable error message.
   responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: The API key is missing or invalid.
       content:
         application/json:
           schema:

@@ -118,41 +118,14 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
-  parameters:
-    ResponseId:
-      name: response_id
-      in: path
-      required: true
-      description: The id of the response.
-      schema:
-        type: integer
-    PathName:
-      name: name
-      in: path
-      required: true
-      description: The name of the resource (URL-encoded).
-      schema:
-        type: string
   schemas:
+    ResponseLabel:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
     LabelNames:
       type: object
       required:
@@ -180,13 +153,40 @@ components:
         error:
           type: string
           description: A human-readable error message.
-    ResponseLabel:
-      type: object
-      properties:
-        name:
-          type: string
-        color:
-          type: string
+  parameters:
+    PathName:
+      name: name
+      in: path
+      required: true
+      description: The name of the resource (URL-encoded).
+      schema:
+        type: string
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
   securitySchemes:
     apiKeyAuth:
       type: apiKey

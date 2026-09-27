@@ -128,45 +128,15 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    SiteId:
-      name: site_id
-      in: path
-      required: true
-      description: The id of the site.
-      schema:
-        type: integer
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The id of the project.
-      schema:
-        type: integer
-    PerPage:
-      name: per_page
-      in: query
-      description: The number of records per page (max 100).
-      schema:
-        type: integer
-        default: 25
-        maximum: 100
-    Page:
-      name: page
-      in: query
-      description: The page of results to return.
-      schema:
-        type: integer
-        default: 1
   responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: The API key is missing or invalid.
       content:
         application/json:
           schema:
@@ -178,6 +148,18 @@ components:
           schema:
             $ref: '#/components/schemas/ValidationError'
   schemas:
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
     Project:
       type: object
       properties:
@@ -234,18 +216,12 @@ components:
           type: boolean
         email_responses:
           type: integer
-    ValidationError:
+    Error:
       type: object
       properties:
         error:
           type: string
-        errors:
-          type: object
-          description: Map of field name to an array of validation messages.
-          additionalProperties:
-            type: array
-            items:
-              type: string
+          description: A human-readable error message.
     ProjectWrite:
       type: object
       properties:
@@ -255,12 +231,36 @@ components:
           type:
           - string
           - 'null'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
+  parameters:
+    SiteId:
+      name: site_id
+      in: path
+      required: true
+      description: The id of the site.
+      schema:
+        type: integer
+    PerPage:
+      name: per_page
+      in: query
+      description: The number of records per page (max 100).
+      schema:
+        type: integer
+        default: 25
+        maximum: 100
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The id of the project.
+      schema:
+        type: integer
   securitySchemes:
     apiKeyAuth:
       type: apiKey
