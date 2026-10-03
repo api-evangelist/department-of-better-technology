@@ -167,26 +167,13 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
     ValidationError:
       type: object
       properties:
@@ -199,20 +186,6 @@ components:
             type: array
             items:
               type: string
-    FormField:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          example: field
-        field_type:
-          type: string
-          description: The kind of field.
-          example: paragraph
-        label:
-          type: string
     Form:
       type: object
       properties:
@@ -228,20 +201,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FormField'
-    Error:
+    FormField:
       type: object
       properties:
-        error:
+        id:
           type: string
-          description: A human-readable error message.
+        type:
+          type: string
+          example: field
+        field_type:
+          type: string
+          description: The kind of field.
+          example: paragraph
+        label:
+          type: string
   parameters:
-    PathId:
-      name: id
-      in: path
-      required: true
-      description: The id of the resource.
-      schema:
-        type: string
     ProjectId:
       name: project_id
       in: path
@@ -249,6 +223,32 @@ components:
       description: The id of the project.
       schema:
         type: integer
+    PathId:
+      name: id
+      in: path
+      required: true
+      description: The id of the resource.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKeyAuth:
       type: apiKey

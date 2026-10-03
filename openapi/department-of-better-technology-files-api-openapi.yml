@@ -58,6 +58,19 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 components:
+  responses:
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -77,19 +90,6 @@ components:
             type: array
             items:
               type: string
-  responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
   securitySchemes:
     apiKeyAuth:
       type: apiKey

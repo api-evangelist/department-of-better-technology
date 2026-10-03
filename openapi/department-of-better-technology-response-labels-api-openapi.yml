@@ -119,6 +119,12 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
     ResponseLabel:
       type: object
       properties:
@@ -126,15 +132,6 @@ components:
           type: string
         color:
           type: string
-    LabelNames:
-      type: object
-      required:
-      - labels
-      properties:
-        labels:
-          type: array
-          items:
-            type: string
     ValidationError:
       type: object
       properties:
@@ -147,12 +144,15 @@ components:
             type: array
             items:
               type: string
-    Error:
+    LabelNames:
       type: object
+      required:
+      - labels
       properties:
-        error:
-          type: string
-          description: A human-readable error message.
+        labels:
+          type: array
+          items:
+            type: string
   parameters:
     PathName:
       name: name
@@ -175,18 +175,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     UnprocessableEntity:
       description: The request was well-formed but failed validation.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKeyAuth:
       type: apiKey

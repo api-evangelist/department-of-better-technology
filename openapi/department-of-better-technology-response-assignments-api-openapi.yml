@@ -125,6 +125,12 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
     Assignee:
       type: object
       properties:
@@ -159,19 +165,15 @@ components:
           description: Each entry has the form "Type,id" (e.g. "User,10").
           items:
             type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
+  parameters:
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
   responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: The API key is missing or invalid.
       content:
@@ -184,14 +186,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
-  parameters:
-    ResponseId:
-      name: response_id
-      in: path
-      required: true
-      description: The id of the response.
-      schema:
-        type: integer
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     apiKeyAuth:
       type: apiKey
