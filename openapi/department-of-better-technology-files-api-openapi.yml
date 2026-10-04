@@ -72,12 +72,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
     ValidationError:
       type: object
       properties:
@@ -90,6 +84,12 @@ components:
             type: array
             items:
               type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
   securitySchemes:
     apiKeyAuth:
       type: apiKey

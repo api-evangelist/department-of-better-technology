@@ -125,24 +125,16 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Error:
+    AssigneeNames:
       type: object
+      required:
+      - assignees
       properties:
-        error:
-          type: string
-          description: A human-readable error message.
-    Assignee:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - User
-          - Team
-        id:
-          type: integer
-        name:
-          type: string
+        assignees:
+          type: array
+          description: Each entry has the form "Type,id" (e.g. "User,10").
+          items:
+            type: string
     ValidationError:
       type: object
       properties:
@@ -155,27 +147,27 @@ components:
             type: array
             items:
               type: string
-    AssigneeNames:
+    Assignee:
       type: object
-      required:
-      - assignees
       properties:
-        assignees:
-          type: array
-          description: Each entry has the form "Type,id" (e.g. "User,10").
-          items:
-            type: string
-  parameters:
-    ResponseId:
-      name: response_id
-      in: path
-      required: true
-      description: The id of the response.
-      schema:
-        type: integer
+        type:
+          type: string
+          enum:
+          - User
+          - Team
+        id:
+          type: integer
+        name:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
   responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
@@ -186,12 +178,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: The API key is missing or invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
   securitySchemes:
     apiKeyAuth:
       type: apiKey

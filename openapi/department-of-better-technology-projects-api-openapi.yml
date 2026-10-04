@@ -128,13 +128,26 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
     ValidationError:
       type: object
       properties:
@@ -147,6 +160,21 @@ components:
             type: array
             items:
               type: string
+    ProjectWrite:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
     Project:
       type: object
       properties:
@@ -203,23 +231,7 @@ components:
           type: boolean
         email_responses:
           type: integer
-    ProjectWrite:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
   parameters:
-    Page:
-      name: page
-      in: query
-      description: The page of results to return.
-      schema:
-        type: integer
-        default: 1
     PerPage:
       name: per_page
       in: query
@@ -228,13 +240,6 @@ components:
         type: integer
         default: 25
         maximum: 100
-    SiteId:
-      name: site_id
-      in: path
-      required: true
-      description: The id of the site.
-      schema:
-        type: integer
     ProjectId:
       name: project_id
       in: path
@@ -242,25 +247,20 @@ components:
       description: The id of the project.
       schema:
         type: integer
-  responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
+    SiteId:
+      name: site_id
+      in: path
+      required: true
+      description: The id of the site.
+      schema:
+        type: integer
   securitySchemes:
     apiKeyAuth:
       type: apiKey

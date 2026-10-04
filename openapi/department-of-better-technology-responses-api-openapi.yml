@@ -197,13 +197,46 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    ValidationError:
       type: object
       properties:
         error:
           type: string
-          description: A human-readable error message.
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    SubmissionSource:
+      type: object
+      properties:
+        type:
+          type: string
+          example: frontend
+        hostname:
+          type: string
     Assignee:
       type: object
       properties:
@@ -223,26 +256,6 @@ components:
           type: string
         color:
           type: string
-    SubmissionSource:
-      type: object
-      properties:
-        type:
-          type: string
-          example: frontend
-        hostname:
-          type: string
-    ValidationError:
-      type: object
-      properties:
-        error:
-          type: string
-        errors:
-          type: object
-          description: Map of field name to an array of validation messages.
-          additionalProperties:
-            type: array
-            items:
-              type: string
     ResponseWrite:
       type: object
       properties:
@@ -264,27 +277,6 @@ components:
           type: boolean
         force_validation:
           type: boolean
-    ResponseDetailed:
-      allOf:
-      - $ref: '#/components/schemas/Response'
-      - type: object
-        properties:
-          archived_responses:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                responses_updated_at:
-                  type: string
-                  format: date-time
-                responses:
-                  type: object
-          assignees:
-            type: array
-            items:
-              $ref: '#/components/schemas/Assignee'
     Response:
       type: object
       properties:
@@ -339,14 +331,34 @@ components:
           - 'null'
         submission_source:
           $ref: '#/components/schemas/SubmissionSource'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+    ResponseDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Response'
+      - type: object
+        properties:
+          archived_responses:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                responses_updated_at:
+                  type: string
+                  format: date-time
+                responses:
+                  type: object
+          assignees:
+            type: array
+            items:
+              $ref: '#/components/schemas/Assignee'
   parameters:
-    Page:
-      name: page
-      in: query
-      description: The page of results to return.
-      schema:
-        type: integer
-        default: 1
     PerPage:
       name: per_page
       in: query
@@ -369,25 +381,13 @@ components:
       description: The id of the response.
       schema:
         type: integer
-  responses:
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Page:
+      name: page
+      in: query
+      description: The page of results to return.
+      schema:
+        type: integer
+        default: 1
   securitySchemes:
     apiKeyAuth:
       type: apiKey
