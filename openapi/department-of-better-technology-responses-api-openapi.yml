@@ -197,38 +197,13 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    ValidationError:
+    Error:
       type: object
       properties:
         error:
           type: string
-        errors:
-          type: object
-          description: Map of field name to an array of validation messages.
-          additionalProperties:
-            type: array
-            items:
-              type: string
+          description: A human-readable error message.
     SubmissionSource:
       type: object
       properties:
@@ -237,46 +212,27 @@ components:
           example: frontend
         hostname:
           type: string
-    Assignee:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - User
-          - Team
-        id:
-          type: integer
-        name:
-          type: string
-    ResponseLabel:
-      type: object
-      properties:
-        name:
-          type: string
-        color:
-          type: string
-    ResponseWrite:
-      type: object
-      properties:
-        response_fields:
-          type: object
-          description: Map of field id (string) to submitted value.
-          additionalProperties: true
-        status:
-          type: string
-        labels:
-          type: array
-          items:
-            type: string
-        skip_email_confirmation:
-          type: boolean
-        skip_notifications:
-          type: boolean
-        skip_validation:
-          type: boolean
-        force_validation:
-          type: boolean
+    ResponseDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Response'
+      - type: object
+        properties:
+          archived_responses:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                responses_updated_at:
+                  type: string
+                  format: date-time
+                responses:
+                  type: object
+          assignees:
+            type: array
+            items:
+              $ref: '#/components/schemas/Assignee'
     Response:
       type: object
       properties:
@@ -331,34 +287,66 @@ components:
           - 'null'
         submission_source:
           $ref: '#/components/schemas/SubmissionSource'
-    Error:
+    ValidationError:
       type: object
       properties:
         error:
           type: string
-          description: A human-readable error message.
-    ResponseDetailed:
-      allOf:
-      - $ref: '#/components/schemas/Response'
-      - type: object
-        properties:
-          archived_responses:
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
             type: array
             items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                responses_updated_at:
-                  type: string
-                  format: date-time
-                responses:
-                  type: object
-          assignees:
-            type: array
-            items:
-              $ref: '#/components/schemas/Assignee'
+              type: string
+    ResponseWrite:
+      type: object
+      properties:
+        response_fields:
+          type: object
+          description: Map of field id (string) to submitted value.
+          additionalProperties: true
+        status:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        skip_email_confirmation:
+          type: boolean
+        skip_notifications:
+          type: boolean
+        skip_validation:
+          type: boolean
+        force_validation:
+          type: boolean
+    Assignee:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - User
+          - Team
+        id:
+          type: integer
+        name:
+          type: string
+    ResponseLabel:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
   parameters:
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
     PerPage:
       name: per_page
       in: query
@@ -374,13 +362,6 @@ components:
       description: The id of the project.
       schema:
         type: integer
-    ResponseId:
-      name: response_id
-      in: path
-      required: true
-      description: The id of the response.
-      schema:
-        type: integer
     Page:
       name: page
       in: query
@@ -388,6 +369,25 @@ components:
       schema:
         type: integer
         default: 1
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
   securitySchemes:
     apiKeyAuth:
       type: apiKey

@@ -167,26 +167,13 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: The request was well-formed but failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidationError'
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
     ValidationError:
       type: object
       properties:
@@ -199,26 +186,6 @@ components:
             type: array
             items:
               type: string
-    FormField:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          example: field
-        field_type:
-          type: string
-          description: The kind of field.
-          example: paragraph
-        label:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
     Form:
       type: object
       properties:
@@ -234,6 +201,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FormField'
+    FormField:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: field
+        field_type:
+          type: string
+          description: The kind of field.
+          example: paragraph
+        label:
+          type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: The request was well-formed but failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
   parameters:
     ProjectId:
       name: project_id

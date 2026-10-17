@@ -125,16 +125,12 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    AssigneeNames:
+    Error:
       type: object
-      required:
-      - assignees
       properties:
-        assignees:
-          type: array
-          description: Each entry has the form "Type,id" (e.g. "User,10").
-          items:
-            type: string
+        error:
+          type: string
+          description: A human-readable error message.
     ValidationError:
       type: object
       properties:
@@ -159,15 +155,33 @@ components:
           type: integer
         name:
           type: string
-    Error:
+    AssigneeNames:
       type: object
+      required:
+      - assignees
       properties:
-        error:
-          type: string
-          description: A human-readable error message.
+        assignees:
+          type: array
+          description: Each entry has the form "Type,id" (e.g. "User,10").
+          items:
+            type: string
+  parameters:
+    ResponseId:
+      name: response_id
+      in: path
+      required: true
+      description: The id of the response.
+      schema:
+        type: integer
   responses:
     NotFound:
       description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: The API key is missing or invalid.
       content:
         application/json:
           schema:
@@ -178,20 +192,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
-    Unauthorized:
-      description: The API key is missing or invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    ResponseId:
-      name: response_id
-      in: path
-      required: true
-      description: The id of the response.
-      schema:
-        type: integer
   securitySchemes:
     apiKeyAuth:
       type: apiKey

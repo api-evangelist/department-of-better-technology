@@ -58,6 +58,25 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A human-readable error message.
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          description: Map of field name to an array of validation messages.
+          additionalProperties:
+            type: array
+            items:
+              type: string
   responses:
     UnprocessableEntity:
       description: The request was well-formed but failed validation.
@@ -71,25 +90,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  schemas:
-    ValidationError:
-      type: object
-      properties:
-        error:
-          type: string
-        errors:
-          type: object
-          description: Map of field name to an array of validation messages.
-          additionalProperties:
-            type: array
-            items:
-              type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: A human-readable error message.
   securitySchemes:
     apiKeyAuth:
       type: apiKey
