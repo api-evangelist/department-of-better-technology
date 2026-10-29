@@ -64,6 +64,124 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Department of Better Technology is a company surfaced as a portfolio company of 500-global and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+The Department of Better Technology (DOBT), founded in 2013 by former Presidential Innovation Fellows and later acquired by CityBase, builds Screendoor — a form-building and submission- management platform used by government agencies and organizations such as ProPublica, the Los Angeles Times, the Consumer Financial Protection Bureau, and the Ford Foundation to run paperless intake, evaluation, and approval workflows. The Screendoor REST API programmatically manages sites, projects, forms and form fields, workflow statuses, labels, responses (submissions), response labels, and reviewer assignments, using API-key authentication, offset pagination with RFC 5988 Link headers, and an explicit API version.
 
-Backed by: 500-global — https://dobt.co
+**Areas:** Company · Forms · Government · GovTech · Civic Technology · Workflows · Data Collection · Screendoor · Public Sector · Forms API
+
+## Department of Better Technology on APIs.io
+
+Everything profiled for Department of Better Technology is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/department-of-better-technology/](https://apis.io/providers/department-of-better-technology/)** — or go straight to one of the APIs or properties below.
+
+### APIs (8)
+
+- [Department of Better Technology Files API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-files-api/) — Upload files referenced by response fields.
+- [Department of Better Technology Forms API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-forms-api/) — Manage the form fields collected for a project.
+- [Department of Better Technology Labels API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-labels-api/) — Manage labels used to tag responses within a project.
+- [Department of Better Technology Projects API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-projects-api/) — Manage projects (forms and their workflow) within a site.
+- [Department of Better Technology Response Assignments API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-response-assignments-api/) — Assign users or teams to an individual response.
+- [Department of Better Technology Response Labels API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-response-labels-api/) — Attach or detach labels on an individual response.
+- [Department of Better Technology Responses API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-responses-api/) — Create, read, update, trash, and recover form submissions.
+- [Department of Better Technology Statuses API](https://apis.io/apis/department-of-better-technology/department-of-better-technology-statuses-api/) — Manage the status workflow stages for a project's responses.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [screendoor](https://apis.io/servers/department-of-better-technology/screendoor/)
+
+#### Collections (8)
+
+Postman and Open Collection request collections.
+
+- [Screendoor Files API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-files-api/)
+- [Screendoor Files Forms API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-forms-api/)
+- [Screendoor Files Labels API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-labels-api/)
+- [Screendoor Files Projects API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-projects-api/)
+- [Screendoor Files Response Assignments API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-response-assignments-api/)
+- [Screendoor Files Response Labels API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-response-labels-api/)
+- [Screendoor Files Responses API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-responses-api/)
+- [Screendoor Files Statuses API](https://apis.io/collections/department-of-better-technology/open-department-of-better-technology-statuses-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Department Of Better Technology Screendoor Overlay](https://apis.io/overlays/department-of-better-technology/department-of-better-technology-screendoor-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Department Of Better Technology Authentication](https://apis.io/security/department-of-better-technology/department-of-better-technology-authentication/)
+- [Department Of Better Technology Domain Security](https://apis.io/security/department-of-better-technology/department-of-better-technology-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://dobt.co)
+- [Documentation](https://help.dobt.co/)
+- [API reference](https://dobtco.github.io/screendoor-api-docs/)
+- [Sign up](https://screendoor.dobt.co/)
+- [Support](https://help.dobt.co/)
+- [Blog](https://www.dobt.co/blog/)
+- [Privacy policy](https://dashboard.dobt.co/privacy)
+- [GitHub](https://github.com/dobtco)
+- [Status](https://status.dobt.co/)
+
+## API Evangelist rating
+
+**Kin Score 28.1** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 13.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 47.0 |
+| Access clarity | 23.7 |
+
+**Agent readiness 17.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 20.6** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/department-of-better-technology/](https://apis.io/providers/department-of-better-technology/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Department of Better Technology: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/department-of-better-technology/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
